@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -8,15 +9,24 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const [task,setTask] = useState('')
-  const[myTask,setMyTasks] = useState([])
+  const [task,setTask] = useState<string>('')
+  const[myTask,setMyTasks] = useState<string[]>([])
+  
   function handleAddTask(){
+  if(task.trim()!==''){
     setMyTasks( oldState =>[...oldState,task])
     setTask('')
   }
+  }
 
+  function handleRemoveTask(taskToRemove:string){
+    setMyTasks(oldStates => oldStates.filter(task=>task!==taskToRemove) )
+  }
   return (
     <View style={styles.container}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+      >
       <Text style={styles.title}>Bem-vindo Eliel</Text>
 
       <TextInput
@@ -45,6 +55,7 @@ export default function Index() {
           myTask.map((item,index) =>(<TouchableOpacity
             key={index} 
             style={styles.buttonTask}
+            onPress={()=>handleRemoveTask(item)}
           >
              
               <Text 
@@ -56,7 +67,7 @@ export default function Index() {
         }
 
     
-
+      </ScrollView>
     </View>
   );
 }
@@ -105,5 +116,4 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight:'bold'
 
-  }
-})
+  }})
